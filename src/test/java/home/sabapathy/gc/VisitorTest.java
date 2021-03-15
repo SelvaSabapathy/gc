@@ -1,8 +1,21 @@
 package home.sabapathy.gc;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@ExtendWith(MockitoExtension.class)
 public class VisitorTest {
+
+    @Mock
+    HeroRepository heroRepository;
+
+    @InjectMocks
+    HeroService heroService;
 
     /**
      * As a visitor, I can view all the heroes.
@@ -10,6 +23,12 @@ public class VisitorTest {
      * When I view all the heros
      * Then I can see names of all heros
      */
+    @Test
+    public void addHeroes() {
+        heroService.add(new Hero(1L, "C", "Chiranjeevi"));
+        heroService.add(new Hero(2L, "N", "Nagarjun"));
+    }
+
     @Test
     public void viewHeroes() {
     }
