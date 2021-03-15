@@ -8,6 +8,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @ExtendWith(MockitoExtension.class)
 public class VisitorTest {
 
@@ -31,6 +38,13 @@ public class VisitorTest {
 
     @Test
     public void viewHeroes() {
+        Hero h1 = new Hero(1L, "C", "Chiranjeevi");
+        Hero h2 = new Hero(2L, "N", "Nagarjun");
+        heroService.add(h1);
+        heroService.add(h2);
+        List<Hero> heroList = heroService.view();
+        assertEquals(heroList.size(), 2);
+        assertEquals(heroList, Arrays.asList(new Hero[]{h1, h2}));
     }
 
     /**
