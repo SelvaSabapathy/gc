@@ -1,5 +1,6 @@
 package home.sabapathy.gc;
 
+import javassist.NotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,10 +78,10 @@ public class VisitorTest {
     @Test
     @DisplayName("Show details of a Hero")
     public void heroDetails() {
-        when(heroRepository.findByName(any(String.class))).thenReturn(new Hero());
-        Hero hero1 = heroService.viewByName("Mark");
+        when(heroRepository.findByName(any(String.class))).thenReturn(Optional.of(new Hero()));
+        Optional<Hero> hero1 = heroService.viewByName(new String());
         verify(heroRepository).findByName(any(String.class));
-        assertThat("",hero1,is(equalTo(new Hero())));
+        assertThat("",hero1,is(equalTo(Optional.of(new Hero()))));
 
     }
 
@@ -97,5 +98,13 @@ public class VisitorTest {
     @Test
     @DisplayName("No Hero found to show details")
     public void nonExistentHeroDetails() {
+        when(heroRepository.findByName(any(String.class))).thenReturn(Optional.empty());
+        Optional<Hero> hero1 = heroService.viewByName(new String());
+        String message = "";
+        if(hero1.equals(Optional.empty())){
+            message = "Hero doesn't exist";
+        }
+        verify(heroRepository).findByName(any(String.class));
+        assertThat("",message,is(equalTo("Hero doesn't exist")));
     }
 }

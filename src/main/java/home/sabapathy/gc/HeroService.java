@@ -24,7 +24,8 @@ public class HeroService {
         return heroRepository.findById(l);
     }
 
-    public Hero viewByName(String name) {
+    public Optional<Hero> viewByName(String name) {
         return heroRepository.findByName(name);
     }
+
 }
