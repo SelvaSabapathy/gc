@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -76,6 +77,11 @@ public class VisitorTest {
     @Test
     @DisplayName("Show details of a Hero")
     public void heroDetails() {
+        when(heroRepository.findByName(any(String.class))).thenReturn(new Hero());
+        Hero hero1 = heroService.viewByName("Mark");
+        verify(heroRepository).findByName(any(String.class));
+        assertThat("",hero1,is(equalTo(new Hero())));
+
     }
 
     /**
