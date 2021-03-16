@@ -1,6 +1,7 @@
 package home.sabapathy.gc;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,6 +37,7 @@ public class VisitorTest {
      * Then I can see names of all heros
      */
     @Test
+    @DisplayName("Add Heroes")
     public void addHeroes() {
         Hero hero = new Hero(1L, "Chiranjeevi", "Bigger than Bachchan");
         when(heroRepository.save(any(Hero.class))).thenReturn(new Hero());
@@ -46,6 +48,7 @@ public class VisitorTest {
     }
 
     @Test
+    @DisplayName("View Heroes")
     public void viewHeroes() {
         List<Hero> mockHeroesList = Arrays.asList(new Hero[]{
                 new Hero(1L, "Chiranjeevi", "Bigger than Bachchan"),
@@ -71,6 +74,7 @@ public class VisitorTest {
      * Then I can view all the details for that hero
      */
     @Test
+    @DisplayName("Show details of a Hero")
     public void heroDetails() {
     }
 
@@ -85,6 +89,7 @@ public class VisitorTest {
      * Then I receive a message that it doesn't exist
      */
     @Test
+    @DisplayName("No Hero found to show details")
     public void nonExistentHeroDetails() {
     }
 }
