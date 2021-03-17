@@ -1,6 +1,5 @@
 package home.sabapathy.gc;
 
-import javassist.NotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,10 +40,9 @@ public class VisitorTest {
     @Test
     @DisplayName("Add Heroes")
     public void addHeroes() {
-        Hero hero = new Hero(1L, "Chiranjeevi", "Bigger than Bachchan");
         when(heroRepository.save(any(Hero.class))).thenReturn(new Hero());
 
-        heroService.add(hero);
+        heroService.add(new Hero());
 
         verify(heroRepository).save(any(Hero.class));
     }
@@ -52,10 +50,7 @@ public class VisitorTest {
     @Test
     @DisplayName("View Heroes")
     public void viewHeroes() {
-        List<Hero> mockHeroesList = Arrays.asList(new Hero[]{
-                new Hero(1L, "Chiranjeevi", "Bigger than Bachchan"),
-                new Hero(1L, "Chiranjeevi", "Smaller than Bachchan")
-        });
+        List<Hero> mockHeroesList = new ArrayList<>();
 
         when(heroRepository.findAll()).thenReturn(mockHeroesList);
 
@@ -79,10 +74,9 @@ public class VisitorTest {
     @DisplayName("Show details of a Hero")
     public void heroDetails() {
         when(heroRepository.findByName(any(String.class))).thenReturn(Optional.of(new Hero()));
-        Optional<Hero> hero1 = heroService.viewByName(new String());
+        Optional<Hero> hero = heroService.viewByName(new String());
         verify(heroRepository).findByName(any(String.class));
-        assertThat("",hero1,is(equalTo(Optional.of(new Hero()))));
-
+        assertThat("", hero.isPresent(), is(true));
     }
 
     /**
@@ -99,12 +93,8 @@ public class VisitorTest {
     @DisplayName("No Hero found to show details")
     public void nonExistentHeroDetails() {
         when(heroRepository.findByName(any(String.class))).thenReturn(Optional.empty());
-        Optional<Hero> hero1 = heroService.viewByName(new String());
-        String message = "";
-        if(hero1.equals(Optional.empty())){
-            message = "Hero doesn't exist";
-        }
+        Optional<Hero> hero = heroService.viewByName(new String());
         verify(heroRepository).findByName(any(String.class));
-        assertThat("",message,is(equalTo("Hero doesn't exist")));
+        assertThat("", hero.isPresent(), is(false));
     }
 }

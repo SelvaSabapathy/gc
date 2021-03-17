@@ -27,5 +27,4 @@ public class HeroService {
     public Optional<Hero> viewByName(String name) {
         return heroRepository.findByName(name);
     }
-
 }
