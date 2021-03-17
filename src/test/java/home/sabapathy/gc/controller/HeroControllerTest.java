@@ -1,8 +1,9 @@
 package home.sabapathy.gc.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.engine.TestExecutionResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +11,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,6 +27,9 @@ public class HeroControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     /**
      * As a visitor, I can view all the heroes.
@@ -35,12 +45,15 @@ public class HeroControllerTest {
     @Test
     @DisplayName("View Heroes")
     public void viewHeroes() throws Exception {
+        List<HeroDto> heroDtoList = Arrays.asList(new HeroDto("Chiranjeevi", "Bigger than Bacchan"));
+
         MvcResult mvcResult = mockMvc.perform(get(baseURL + "/heroes")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()
         ).andReturn();
 
-        System.out.println(mvcResult.getResponse().getContentAsString());
+        String heroos = mvcResult.getResponse().getContentAsString();
+        assertThat("", objectMapper.readValue(heroos, new TypeReference<ArrayList<HeroDto>>() {}), is(heroDtoList));
     }
 
     /**
