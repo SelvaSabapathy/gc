@@ -1,6 +1,6 @@
-package home.sabapathy.gc;
+package home.sabapathy.gc.repository;
 
-import javassist.NotFoundException;
+import home.sabapathy.gc.model.Hero;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,5 +1,7 @@
-package home.sabapathy.gc;
+package home.sabapathy.gc.service;
 
+import home.sabapathy.gc.model.Hero;
+import home.sabapathy.gc.repository.HeroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

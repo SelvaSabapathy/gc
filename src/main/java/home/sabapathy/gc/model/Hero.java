@@ -1,4 +1,4 @@
-package home.sabapathy.gc;
+package home.sabapathy.gc.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

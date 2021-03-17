@@ -1,5 +1,8 @@
-package home.sabapathy.gc;
+package home.sabapathy.gc.service;
 
+import home.sabapathy.gc.model.Hero;
+import home.sabapathy.gc.repository.HeroRepository;
+import home.sabapathy.gc.service.HeroService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
