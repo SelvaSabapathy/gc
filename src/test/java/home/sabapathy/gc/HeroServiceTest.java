@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class VisitorTest {
+public class HeroServiceTest {
 
     @Mock
     private HeroRepository heroRepository;
