@@ -23,7 +23,7 @@ public class HeroController {
         List<Hero> heroes = heroService.view();
 
         List<HeroDto> heroDtos = heroes.stream()
-                .map(hero -> new HeroDto(hero.getAnum(), hero.getName(), hero.getHeroName()))
+                .map(hero -> new HeroDto(hero.getName(), hero.getHeroName()))
                 .collect(Collectors.toList());
         return heroDtos;
     }
@@ -32,21 +32,20 @@ public class HeroController {
     @ResponseStatus(HttpStatus.CREATED)
     public void add(@RequestBody HeroDto heroDto) {
         Hero hero = new Hero();
-        hero.setAnum(heroDto.getAnum());
         hero.setName(heroDto.getName());
         hero.setHeroName(heroDto.getHeroName());
         heroService.add(hero);
     }
 
-    @GetMapping("heroes/{anum}")
+    @GetMapping("heroes/{name}")
     @ResponseBody
-    public HeroDto view(@PathVariable Long anum) throws Exception {
-        Optional<Hero> optionalHero = heroService.view(anum);
+    public HeroDto view(@PathVariable String name) throws Exception {
+        Optional<Hero> optionalHero = heroService.viewByName(name);
         if (optionalHero.isPresent()) {
             Hero hero = optionalHero.get();
-            HeroDto heroDto = new HeroDto(hero.getAnum(), hero.getName(), hero.getHeroName());
+            HeroDto heroDto = new HeroDto(hero.getName(), hero.getHeroName());
             return heroDto;
         }
-        throw new Exception("The Hero " + anum + " doesn't exist");
+        throw new Exception("The Hero -- " + name + " -- doesn't exist");
     }
 }

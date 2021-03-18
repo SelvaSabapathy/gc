@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HeroDto {
-    private Long anum;
     private String name;
     private String heroName;
 }

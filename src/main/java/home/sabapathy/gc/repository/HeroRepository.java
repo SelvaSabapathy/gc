@@ -9,5 +9,4 @@ import java.util.Optional;
 @Repository
 public interface HeroRepository extends JpaRepository<Hero, Long> {
     Optional<Hero> findByName(String any);
-    Optional<Hero> findByAnum(Long anum);
 }
