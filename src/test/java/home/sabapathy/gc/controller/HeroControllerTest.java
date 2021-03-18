@@ -2,8 +2,7 @@ package home.sabapathy.gc.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
 public class HeroControllerTest {
     private static final String baseURL = "/gc/v1";
@@ -42,6 +42,7 @@ public class HeroControllerTest {
      * Then I can see names of all heros
      */
     @Test
+    @Order(1)
     @DisplayName("Add Heroes")
     public void addHeroes() throws Exception {
         HeroDto heroDto = new HeroDto("Chiranjeevi", "Bigger than Bacchan");
@@ -53,6 +54,7 @@ public class HeroControllerTest {
     }
 
     @Test
+    @Order(2)
     @DisplayName("View Heroes")
     public void viewHeroes() throws Exception {
         HeroDto heroDto = new HeroDto("Chiranjeevi", "Bigger than Bacchan");
@@ -83,6 +85,7 @@ public class HeroControllerTest {
      * Then I can view all the details for that hero
      */
     @Test
+    @Order(3)
     @DisplayName("Show details of a Hero")
     public void heroDetails() throws Exception {
         HeroDto expectedHeroDto = new HeroDto("Rajini", "The Superstar");
@@ -109,6 +112,7 @@ public class HeroControllerTest {
      * Then I receive a message that it doesn't exist
      */
     @Test
+    @Order(4)
     @DisplayName("No Hero found to show details")
     public void nonExistentHeroDetails() {
     }
