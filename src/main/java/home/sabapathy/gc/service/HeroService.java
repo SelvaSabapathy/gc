@@ -6,11 +6,13 @@ import home.sabapathy.gc.repository.HeroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class HeroService {
 
     @Autowired
@@ -21,9 +23,7 @@ public class HeroService {
     }
 
     public List<Hero> view() {
-        return Arrays.asList(new Hero[]{new Hero(1L, "Chiranjeevi", "Bigger than Bacchan")});
-
-//        return heroRepository.findAll();
+        return heroRepository.findAll();
     }
 
     public Optional<Hero> viewById(long l) {

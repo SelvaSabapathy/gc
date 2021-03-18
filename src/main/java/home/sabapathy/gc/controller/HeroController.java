@@ -4,12 +4,8 @@ import home.sabapathy.gc.model.Hero;
 import home.sabapathy.gc.service.HeroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,5 +23,14 @@ public class HeroController {
 
         List<HeroDto> heroDtos = heroes.stream().map(hero -> new HeroDto(hero.getName(), hero.getHeroName())).collect(Collectors.toList());
         return heroDtos;
+    }
+
+    @PostMapping("/heroes")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void add(@RequestBody HeroDto heroDto) {
+        Hero hero = new Hero();
+        hero.setName(heroDto.getName());
+        hero.setHeroName(heroDto.getHeroName());
+        heroService.add(hero);
     }
 }
