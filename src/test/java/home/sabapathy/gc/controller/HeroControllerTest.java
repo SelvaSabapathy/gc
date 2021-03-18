@@ -45,7 +45,7 @@ public class HeroControllerTest {
     @Order(1)
     @DisplayName("Add Heroes")
     public void addHeroes() throws Exception {
-        HeroDto heroDto = new HeroDto("Chiranjeevi", "Bigger than Bacchan");
+        HeroDto heroDto = new HeroDto(1L, "Chiranjeevi", "The Megastar");
 
         mockMvc.perform(post(baseURL + "/heroes")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -57,7 +57,7 @@ public class HeroControllerTest {
     @Order(2)
     @DisplayName("View Heroes")
     public void viewHeroes() throws Exception {
-        HeroDto heroDto = new HeroDto("Chiranjeevi", "Bigger than Bacchan");
+        HeroDto heroDto = new HeroDto(1L, "Chiranjeevi", "The Megastar");
         List<HeroDto> heroDtoList = Arrays.asList(new HeroDto[] {heroDto});
 
         mockMvc.perform(post(baseURL + "/heroes")
@@ -88,8 +88,13 @@ public class HeroControllerTest {
     @Order(3)
     @DisplayName("Show details of a Hero")
     public void heroDetails() throws Exception {
-        HeroDto expectedHeroDto = new HeroDto("Rajini", "The Superstar");
-        MvcResult mvcResult = mockMvc.perform(get("/hero/1").contentType(MediaType.APPLICATION_JSON))
+        HeroDto expectedHeroDto = new HeroDto(2L, "Rajini", "The Superstar");
+        mockMvc.perform(post(baseURL + "/heroes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expectedHeroDto))
+        ).andExpect(status().isCreated());
+
+        MvcResult mvcResult = mockMvc.perform(get(baseURL + "/heroes/2").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 

@@ -33,4 +33,8 @@ public class HeroService {
     public Optional<Hero> viewByName(String name) {
         return heroRepository.findByName(name);
     }
+
+    public Optional<Hero> view(Long anum) {
+        return heroRepository.findByAnum(anum);
+    }
 }

@@ -15,6 +15,9 @@ public class Hero {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "Aathar_Number")
+    private long anum;
+
     @Column(name = "Real_Name")
     private String name;
 
