@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -84,7 +84,18 @@ public class HeroControllerTest {
      */
     @Test
     @DisplayName("Show details of a Hero")
-    public void heroDetails() {
+    public void heroDetails() throws Exception {
+        HeroDto expectedHeroDto = new HeroDto("Rajini", "The Superstar");
+        MvcResult mvcResult = mockMvc.perform(get("/hero/1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String heroString = mvcResult.getResponse().getContentAsString();
+        assertThat("", heroString, is(notNullValue()));
+        assertThat("", heroString, is(not(emptyString())));
+
+        HeroDto heroDto = objectMapper.readValue(heroString, HeroDto.class);
+        assertThat("", heroDto, is(expectedHeroDto));
     }
 
     /**
