@@ -39,7 +39,6 @@ public class HeroController {
     }
 
     @GetMapping("heroes/{name}")
-    @ResponseBody
     public HeroDto view(@PathVariable String name) throws Exception {
         Optional<Hero> optionalHero = heroService.viewByName(name);
         if (optionalHero.isPresent()) {
