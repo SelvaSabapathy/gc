@@ -12,8 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class HeroControllerTest {
@@ -34,6 +34,12 @@ public class HeroControllerTest {
     @Order(1)
     @DisplayName("Add Heroes")
     public void addHeroes() {
+        doNothing().when(heroService).add(any(Hero.class));
+
+        heroController.add(new HeroDto());
+
+        verify(heroService).add(any(Hero.class));
+
     }
 
     @Test
