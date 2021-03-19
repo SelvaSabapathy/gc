@@ -11,7 +11,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -66,7 +69,14 @@ public class HeroControllerTest {
     @Test
     @Order(3)
     @DisplayName("Show details of a Hero")
-    public void heroDetails() {
+    public void heroDetails() throws Exception {
+        HeroDto expectedHeroDto = new HeroDto();
+        when(heroService.viewByName(any(String.class))).thenReturn(Optional.of(new Hero()));
+
+        HeroDto heroDto = heroController.view("");
+
+        verify(heroService).viewByName("");
+        assertThat("", heroDto, is(expectedHeroDto));
     }
 
     /**
