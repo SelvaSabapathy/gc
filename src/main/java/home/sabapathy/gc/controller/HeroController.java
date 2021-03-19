@@ -5,6 +5,7 @@ import home.sabapathy.gc.service.HeroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +47,6 @@ public class HeroController {
             HeroDto heroDto = new HeroDto(hero.getName(), hero.getHeroName());
             return heroDto;
         }
-        throw new Exception("The Hero -- " + name + " -- doesn't exist");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No hero found");
     }
 }

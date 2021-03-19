@@ -119,6 +119,18 @@ public class HeroControllerTest {
     @Test
     @Order(4)
     @DisplayName("No Hero found to show details")
-    public void nonExistentHeroDetails() {
+    public void nonExistentHeroDetails() throws Exception {
+        String expectedErrorMessage = "No hero found";
+
+        MvcResult mvcResult = mockMvc.perform(get(baseURL + "/heroes/Rajini").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        String heroString = mvcResult.getResponse().getContentAsString();
+        assertThat("", heroString, is(notNullValue()));
+        assertThat("", heroString, is(emptyString()));
+
+        String errorMessage = mvcResult.getResponse().getErrorMessage();
+        assertThat("", errorMessage, is(expectedErrorMessage));
     }
 }
