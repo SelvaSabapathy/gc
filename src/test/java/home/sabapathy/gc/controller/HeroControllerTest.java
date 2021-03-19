@@ -1,85 +1,58 @@
 package home.sabapathy.gc.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+import home.sabapathy.gc.model.Hero;
+import home.sabapathy.gc.service.HeroService;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
+@ExtendWith(MockitoExtension.class)
 public class HeroControllerTest {
-    private static final String baseURL = "/gc/v1";
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Mock
+    private HeroService heroService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @InjectMocks
+    private HeroController heroController;
 
     /**
      * As a visitor, I can view all the heroes.
-     *
+     * <p>
      * When I view all the heros
      * Then I can see names of all heros
      */
     @Test
     @Order(1)
     @DisplayName("Add Heroes")
-    public void addHeroes() throws Exception {
-        HeroDto heroDto = new HeroDto("Chiranjeevi", "The Megastar");
-
-        mockMvc.perform(post(baseURL + "/heroes")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(heroDto))
-        ).andExpect(status().isCreated());
+    public void addHeroes() {
     }
 
     @Test
     @Order(2)
     @DisplayName("View Heroes")
-    public void viewHeroes() throws Exception {
-        HeroDto heroDto = new HeroDto("Chiranjeevi", "The Megastar");
-        List<HeroDto> heroDtoList = Arrays.asList(new HeroDto[] {heroDto});
+    public void viewHeroes() {
+        when(heroService.view()).thenReturn(new ArrayList<Hero>());
 
-        mockMvc.perform(post(baseURL + "/heroes")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(heroDto))
-        ).andExpect(status().isCreated());
+        heroController.view();
 
-        MvcResult mvcResult = mockMvc.perform(get(baseURL + "/heroes")
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()
-        ).andReturn();
-
-        String heroos = mvcResult.getResponse().getContentAsString();
-        assertThat("", objectMapper.readValue(heroos, new TypeReference<ArrayList<HeroDto>>() {}), is(heroDtoList));
+        verify(heroService).view();
     }
 
     /**
      * As a visitor, I can see information about any individual hero so that I can see their stats.
-     *
+     * <p>
      * Rule: Heroes have an image, real name, hero name, height, weight, special power, intelligence,
      * strength, power, speed, agility, description, and story.
-     *
+     * <p>
      * Given I have the name of a hero
      * When I retreive the hero
      * Then I can view all the details for that hero
@@ -87,31 +60,15 @@ public class HeroControllerTest {
     @Test
     @Order(3)
     @DisplayName("Show details of a Hero")
-    public void heroDetails() throws Exception {
-        HeroDto expectedHeroDto = new HeroDto("Rajini", "The Superstar");
-        mockMvc.perform(post(baseURL + "/heroes")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(expectedHeroDto))
-        ).andExpect(status().isCreated());
-
-        MvcResult mvcResult = mockMvc.perform(get(baseURL + "/heroes/Rajini").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String heroString = mvcResult.getResponse().getContentAsString();
-        assertThat("", heroString, is(notNullValue()));
-        assertThat("", heroString, is(not(emptyString())));
-
-        HeroDto heroDto = objectMapper.readValue(heroString, HeroDto.class);
-        assertThat("", heroDto, is(expectedHeroDto));
+    public void heroDetails() {
     }
 
     /**
      * As a visitor, I can see information about any individual hero so that I can see their stats.
-     *
+     * <p>
      * Rule: Heroes have an image, real name, hero name, height, weight, special power, intelligence,
      * strength, power, speed, agility, description, and story.
-     *
+     * <p>
      * Given I have an incorrect hero name
      * When I retreive details for that hero
      * Then I receive a message that it doesn't exist
@@ -119,18 +76,6 @@ public class HeroControllerTest {
     @Test
     @Order(4)
     @DisplayName("No Hero found to show details")
-    public void nonExistentHeroDetails() throws Exception {
-        String expectedErrorMessage = "No hero found";
-
-        MvcResult mvcResult = mockMvc.perform(get(baseURL + "/heroes/Rajini").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andReturn();
-
-        String heroString = mvcResult.getResponse().getContentAsString();
-        assertThat("", heroString, is(notNullValue()));
-        assertThat("", heroString, is(emptyString()));
-
-        String errorMessage = mvcResult.getResponse().getErrorMessage();
-        assertThat("", errorMessage, is(expectedErrorMessage));
+    public void nonExistentHeroDetails() {
     }
 }
