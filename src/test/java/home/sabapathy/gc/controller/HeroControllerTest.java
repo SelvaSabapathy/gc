@@ -2,6 +2,7 @@ package home.sabapathy.gc.controller;
 
 import home.sabapathy.gc.model.Hero;
 import home.sabapathy.gc.service.HeroService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -9,12 +10,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -26,6 +29,11 @@ public class HeroControllerTest {
 
     @InjectMocks
     private HeroController heroController;
+
+    @AfterEach
+    public void tearDown() {
+        verifyNoMoreInteractions(heroService);
+    }
 
     /**
      * As a visitor, I can view all the heroes.
@@ -92,6 +100,12 @@ public class HeroControllerTest {
     @Test
     @Order(4)
     @DisplayName("No Hero found to show details")
-    public void nonExistentHeroDetails() {
+    public void nonExistentHeroDetails() throws Exception {
+        when(heroService.viewByName(any(String.class))).thenReturn(Optional.empty());
+
+        ResponseStatusException rse = assertThrows(ResponseStatusException.class, () -> heroController.view(""));
+
+        verify(heroService).viewByName("");
+        assertThat("", rse.getMessage(), is("404 NOT_FOUND \"No hero found\""));
     }
 }
